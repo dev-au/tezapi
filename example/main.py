@@ -8,7 +8,7 @@ app = AioAPI()
 render = Jinja2Template('templates')
 
 
-# path var and template response and raise error
+# use simple errors and template
 # ///////////////////////////////////////
 @app.get("/hello/{name}")
 async def hello(name: str):
@@ -19,7 +19,7 @@ async def hello(name: str):
 
 # ///////////////////////////////////////
 
-# raise class based errors
+# use class based errors
 
 class UsernameError(ClassBaseError):
     status_code = 400
