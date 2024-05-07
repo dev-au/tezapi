@@ -2,7 +2,7 @@ import inspect
 
 from aiohttp.web_request import Request
 
-from httpexception import InternalServerError, APIException
+from httpexception import APIException
 
 
 class Route:
@@ -18,13 +18,11 @@ class Route:
 
     async def __call__(self, request: Request):
         request_path_data = self._request_path(request)
-        api_exception_occurred = False
         try:
             return await self.handler(**request_path_data)
         except APIException as error:
-            print(error)
-        finally:
-            print('nooooo')
+            return error.response
+
 
     def _request_path(self, request: Request):
         data = {}

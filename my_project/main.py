@@ -1,12 +1,13 @@
 from aioapi import AioAPI, Request
-from aioapi.httpexception import SampleException
+from my_exceptions import SampleException1
+from aioapi.httpexception import SampleException2
 
 app = AioAPI()
 
 
 @app.get('/hello/{name}')
 async def hello(request: Request, name: str):
-    raise SampleException()
+    raise SampleException2()
 
 
 app.run()

@@ -16,3 +16,8 @@ class APIException(Exception):
 class InternalServerError(APIException):
     def __init__(self):
         super().__init__(name='InternalServerError', status_code=500)
+
+
+class SampleException2(APIException):
+    def __init__(self):
+        super().__init__(name='SampleException', status_code=400)
