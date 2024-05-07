@@ -1,8 +1,13 @@
 import inspect
+import logging
 
 from aiohttp.web_request import Request
 
-from httpexception import APIException
+from aioapi.exceptions import APIError, InternalServerError, ClassBaseError
+from aioapi.responses import JSONResponse, HTMLResponse
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s - %(pathname)s:%(lineno)d')
 
 
 class Route:
@@ -17,11 +22,22 @@ class Route:
         self.signature = signature
 
     async def __call__(self, request: Request):
-        request_path_data = self._request_path(request)
         try:
-            return await self.handler(**request_path_data)
-        except APIException as error:
-            return error.response
+            request_path_data = self._request_path(request)
+        except APIError as error:
+            return error.__response__
+        try:
+            result = await self.handler(**request_path_data)
+            if isinstance(result, dict):
+                return JSONResponse(result).__response__
+            try:
+                return result.__response__
+            except AttributeError:
+                return HTMLResponse(result).__response__
+        except APIError as error:
+            return error.__response__
+        except ClassBaseError as error:
+            return error.__response__
 
 
     def _request_path(self, request: Request):
@@ -31,8 +47,14 @@ class Route:
             if value == Request:
                 item = request
             elif value == int:
-                item = int(item)
+                try:
+                    item = int(item)
+                except ValueError:
+                    raise APIError('PathValidationError', 400, f'{key} is must be an integer')
             elif value == float:
-                item = float(item)
+                try:
+                    item = float(item)
+                except ValueError:
+                    raise APIError('PathValidationError', 400, f'{key} must be a float')
             data[key] = item
         return data
