@@ -32,7 +32,7 @@ render = Jinja2Template('templates')
 async def hello():
     return {'ok': True}
 
-# Run the aiohttp-api application
+# Run the TezAPI application
 app.run()
 ```
 
