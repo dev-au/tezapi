@@ -1,7 +1,7 @@
 Certainly! Here's the full README.md file incorporating all the detailed explanations and examples:
 
 ```markdown
-# aiohttp-api
+# tezapi
 
 aiohttp-api is an asynchronous web framework for building powerful and efficient web APIs and applications with Python. It leverages the asyncio and aiohttp libraries to provide a seamless development experience for building high-performance web applications.
 
