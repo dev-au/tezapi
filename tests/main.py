@@ -1,4 +1,4 @@
-from  import AioAPI, Request
+from aiohttp_api import AioAPI, Request
 from aiohttp_api.exceptions import APIError, ClassBaseError
 from aiohttp_api.schemas import SchemaModel
 from aiohttp_api.templating import Jinja2Template
