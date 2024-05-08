@@ -1,6 +1,6 @@
 import jinja2
 
-from aioapi.responses import HTMLResponse
+from aiohttp_api.responses import HTMLResponse
 
 
 class Jinja2Template:
