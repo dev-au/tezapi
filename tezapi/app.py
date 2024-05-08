@@ -68,6 +68,5 @@ class TezAPI(web.Application):
         return run_middleware
 
     def run(self):
-        app = self
-        app.add_routes(self.routes)
-        web.run_app(app, host=self.host, port=self.port)
+        self.add_routes(self.routes)
+        web.run_app(self, host=self.host, port=self.port)
