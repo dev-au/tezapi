@@ -1,4 +1,4 @@
-from aiohttp_api.exceptions.apiexception import ClassBaseError
+from src.exceptions.apiexception import ClassBaseError
 
 
 class InternalServerError(ClassBaseError):

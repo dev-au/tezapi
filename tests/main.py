@@ -1,7 +1,7 @@
-from aiohttp_api import AioAPI, Request
-from aiohttp_api.exceptions import APIError, ClassBaseError
-from aiohttp_api.schemas import SchemaModel
-from aiohttp_api.templating import Jinja2Template
+from src import AioAPI, Request
+from src.exceptions import APIError, ClassBaseError
+from src.schemas import SchemaModel
+from src.templating import Jinja2Template
 
 app = AioAPI()
 
