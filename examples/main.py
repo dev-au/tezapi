@@ -24,7 +24,7 @@ class UserSchema(SchemaModel):
 @app.post("/")
 async def hello(user: UserSchema):
     print(user)
-    return car
+    return user
 
 
 app.run()
