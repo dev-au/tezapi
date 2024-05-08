@@ -18,16 +18,16 @@ aiohttp-api is an asynchronous web framework for building powerful and efficient
 You can install aiohttp-api via pip:
 
 
-pip install aiohttp-api
+pip install tezapi
 ```
 
 ## Quick Start
 
 ```python
-from aiohtt_api import AioAPI, Request
-from aiohtt_api.exceptions import APIError, ClassBaseError
-from aiohtt_api.schemas import SchemaModel
-from aiohtt_api.templating import Jinja2Template
+from tezapi import AioAPI, Request
+from tezapi.exceptions import APIError, ClassBaseError
+from tezapi.schemas import SchemaModel
+from tezapi.templating import Jinja2Template
 
 app = AioAPI()
 render = Jinja2Template('templates')
@@ -96,7 +96,7 @@ app.add_middleware(logger_middleware)
 AioAPI allows you to serve static files such as CSS, JavaScript, and images alongside your dynamic content. You can use the `StaticFiles` class to define a route for serving static files from a directory:
 
 ```python
-from aiohtt_api.static import StaticFiles
+from tezapi.static import StaticFiles
 
 # Define a route for serving static files
 app.add_static('/static', path='static')
@@ -107,7 +107,7 @@ app.add_static('/static', path='static')
 Testing is an essential part of the development process. AioAPI provides utilities for testing your web applications, including the ability to simulate HTTP requests and responses.
 
 ```python
-from aiohtt_api.testing import AioAPITestClient
+from tezapi.testing import AioAPITestClient
 
 async with AioAPITestClient(app) as client:
     response = await client.get('/hello')
