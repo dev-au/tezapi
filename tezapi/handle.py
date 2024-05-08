@@ -4,7 +4,7 @@ from aiohttp.web_request import Request
 from .routes import Route
 
 
-class AioAPI(web.Application):
+class TezAPI(web.Application):
     def __init__(self, host: str = '127.0.0.1', port: int = 8000, **kwargs):
         self.host = host
         self.port = port

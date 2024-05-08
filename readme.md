@@ -24,12 +24,12 @@ pip install tezapi
 ## Quick Start
 
 ```python
-from tezapi import AioAPI, Request
+from tezapi import TezAPI, Request
 from tezapi.exceptions import APIError, ClassBaseError
 from tezapi.schemas import SchemaModel
 from tezapi.templating import Jinja2Template
 
-app = AioAPI()
+app = TezAPI()
 render = Jinja2Template('templates')
 
 # Define routes and handlers

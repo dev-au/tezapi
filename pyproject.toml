@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+[tool.poetry]
+packages = [
+    { include = "tezapi", from = "." }
+]
+[project]
+dependencies = [
+    "aiohttp~=3.9.5",
+    "jinja2~=3.1.4"
+]
+name = "tezapi"
+version = "0.0.2"
+authors = [
+    { name = "dev-au", email = "devaubusiness@gmail.com" },
+]
+description = "Asynchronous web framework for building powerful web APIs and applications with Python"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+[project.urls]
+Homepage = "https://github.com/dev-au/tezapi"
+Issues = "https://github.com/dev-au/tezapi/issues"
