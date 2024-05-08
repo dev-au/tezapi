@@ -1,7 +1,7 @@
 from aiohttp import web
 from aiohttp.web_request import Request
 
-from aiohttp_api.routes import Route
+from .routes import Route
 
 
 class AioAPI(web.Application):

@@ -2,8 +2,8 @@ from json import JSONDecodeError as JSONDecodeException
 
 from aiohttp.web_request import Request
 
-from aiohttp_api.exceptions import JSONDecodeError, APIError
-from aiohttp_api.responses import JSONResponse
+from .exceptions import JSONDecodeError, APIError
+from .responses import JSONResponse
 
 
 class SchemaModel:
