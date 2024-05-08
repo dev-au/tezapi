@@ -3,8 +3,8 @@ import logging
 
 from aiohttp.web_request import Request
 
-from src.exceptions import APIError, InternalServerError, ClassBaseError
-from src.responses import JSONResponse, HTMLResponse
+from aiohttp_api.exceptions import APIError, InternalServerError, ClassBaseError
+from aiohttp_api.responses import JSONResponse, HTMLResponse
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s - %(pathname)s:%(lineno)d')
