@@ -1,5 +1,3 @@
-Certainly! Here's the full README.md file incorporating all the detailed explanations and examples:
-
 # TezAPI
 
 ```markdown
