@@ -11,7 +11,7 @@ dependencies = [
     "jinja2~=3.1.4"
 ]
 name = "tezapi"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
     { name = "dev-au", email = "devaubusiness@gmail.com" },
 ]
