@@ -1,15 +1,23 @@
-from tezapi import TezAPI
+from example_schemas import UserSchema, CarSchema
+from tezapi import TezAPI, Request
 from tezapi.templating import Jinja2Template
 
 app = TezAPI()
 render = Jinja2Template('templates')
 
 
-# Define routes and handlers
-@app.get("/{name}")
-async def hello(name: str):
-    return render("home.html", {"name": name})
+@app.middleware
+async def middleware_handler(request: Request, call_next):
+    print('Middleware started')
+    response = await call_next(request)
+    print('Middleware finished')
+    return response
 
 
-# Run the aiohttp-api application
+@app.post("/")
+async def hello(user: UserSchema, car: CarSchema):
+    print(user)
+    return car
+
+
 app.run()

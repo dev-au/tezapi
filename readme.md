@@ -75,20 +75,19 @@ async def search_users(request: Request):
 Middleware in aiohttp-api allows you to intercept and modify requests and responses before they reach the handler. You can use middleware for tasks such as authentication, logging, and request/response manipulation.
 
 ```python
-async def logger_middleware(request: Request, handler, **kwargs):
+@app.middleware
+async def logger_middleware(request: Request, handler):
     # Log request information
     print(f"Received {request.method} request to {request.path}")
     
     # Call the next middleware/handler in the chain
-    response = await handler(request, **kwargs)
+    response = await handler(request)
     
     # Log response information
     print(f"Responded with {response.status}")
     
     return response
 
-# Register middleware with the aiohttp-api app
-app.add_middleware(logger_middleware)
 ```
 
 ### Static Files and Asset Handling
@@ -102,16 +101,4 @@ from tezapi.static import StaticFiles
 app.add_static('/static', path='static')
 ```
 
-### Testing
-
-Testing is an essential part of the development process. AioAPI provides utilities for testing your web applications, including the ability to simulate HTTP requests and responses.
-
-```python
-from tezapi.testing import AioAPITestClient
-
-async with AioAPITestClient(app) as client:
-    response = await client.get('/hello')
-    assert response.status == 200
-    assert await response.text() == 'Hello, aiohttp-api!'
-```
 

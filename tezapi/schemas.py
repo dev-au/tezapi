@@ -1,47 +1,30 @@
-from json import JSONDecodeError as JSONDecodeException
-
-from aiohttp.web_request import Request
-
-from .exceptions import JSONDecodeError, APIError
+from .exceptions import APIError
 from .responses import JSONResponse
 
 
 class SchemaModel:
-    def __init_subclass__(cls, **kwargs):
-        cls.__fields__ = cls.__annotations__
 
-    def __init__(self, request: Request):
-        self._request = request
+    def __init__(self, data: dict):
+        self._parse_model(data)
 
     @property
     def __response__(self):
         result = self.__dict__
-        del result['_request']
         return JSONResponse(result).__response__
 
     def _parse_model(self, data):
-        for key, annotate in self.__fields__.items():
+        for key, annotate in self.__annotations__.items():
             if key in data:
-                try:
-                    item = annotate(data.get(key))
+                item = data.get(key)
+                if isinstance(item, annotate):
                     self.__setattr__(key, item)
-                except ValueError:
-                    raise APIError('FieldTypeError', 400, f'{key.title()} is must be a {annotate.__name__}')
+                else:
+                    raise APIError('FieldTypeError', 400,
+                                   f'{self.__class__.__name__} {key} is must be a {annotate.__name__}')
             else:
                 if not hasattr(self, key):
-                    raise APIError('FieldTypeError', 400, f'{key.title()} must be provided')
+                    raise APIError('FieldTypeError', 400, f'{self.__class__.__name__} {key} must be provided')
         return self
 
-    async def json_validate(self):
-        try:
-            data = await self._request.json()
-            self._parse_model(data)
-        except JSONDecodeException:
-            raise JSONDecodeError()
-
-    async def form_validate(self):
-        try:
-            data = await self._request.post()
-            self._parse_model(data)
-        except JSONDecodeException:
-            raise JSONDecodeError()
+    def __repr__(self):
+        return str(self.__dict__)
