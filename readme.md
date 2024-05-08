@@ -1,6 +1,5 @@
 # TezAPI
 
-```markdown
 TezAPI is an asynchronous web framework for building powerful and efficient web APIs and applications with Python. It leverages the asyncio and aiohttp libraries to provide a seamless development experience for building high-performance web applications.
 
 ## Key Features
@@ -13,9 +12,9 @@ TezAPI is an asynchronous web framework for building powerful and efficient web 
 
 ## Installation
 
-You can install aiohttp-api via pip:
+You can install TezAPI via pip:
 
-
+```commandline
 pip install tezapi
 ```
 
