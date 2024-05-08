@@ -24,10 +24,10 @@ pip install aiohttp-api
 ## Quick Start
 
 ```python
-from src import AioAPI, Request
-from src.exceptions import APIError, ClassBaseError
-from src.schemas import SchemaModel
-from src.templating import Jinja2Template
+from aiohtt_api import AioAPI, Request
+from aiohtt_api.exceptions import APIError, ClassBaseError
+from aiohtt_api.schemas import SchemaModel
+from aiohtt_api.templating import Jinja2Template
 
 app = AioAPI()
 render = Jinja2Template('templates')
@@ -96,7 +96,7 @@ app.add_middleware(logger_middleware)
 AioAPI allows you to serve static files such as CSS, JavaScript, and images alongside your dynamic content. You can use the `StaticFiles` class to define a route for serving static files from a directory:
 
 ```python
-from src.static import StaticFiles
+from aiohtt_api.static import StaticFiles
 
 # Define a route for serving static files
 app.add_static('/static', path='static')
@@ -107,7 +107,7 @@ app.add_static('/static', path='static')
 Testing is an essential part of the development process. AioAPI provides utilities for testing your web applications, including the ability to simulate HTTP requests and responses.
 
 ```python
-from src.testing import AioAPITestClient
+from aiohtt_api.testing import AioAPITestClient
 
 async with AioAPITestClient(app) as client:
     response = await client.get('/hello')
