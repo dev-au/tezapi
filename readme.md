@@ -1,17 +1,17 @@
 Certainly! Here's the full README.md file incorporating all the detailed explanations and examples:
 
-```markdown
-# tezapi
+# TezAPI
 
-aiohttp-api is an asynchronous web framework for building powerful and efficient web APIs and applications with Python. It leverages the asyncio and aiohttp libraries to provide a seamless development experience for building high-performance web applications.
+```markdown
+TezAPI is an asynchronous web framework for building powerful and efficient web APIs and applications with Python. It leverages the asyncio and aiohttp libraries to provide a seamless development experience for building high-performance web applications.
 
 ## Key Features
 
-- Asynchronous by design: Built on top of asyncio and aiohttp, aiohttp-api allows you to write highly concurrent and efficient web applications.
-- Simple and intuitive API: With minimal boilerplate and sensible defaults, aiohttp-api provides a clean and intuitive API for defining routes and handling requests.
-- Error handling made easy: aiohttp-api simplifies error handling with support for both simple and class-based error responses, making it straightforward to handle exceptions and provide meaningful feedback to clients.
-- Schema validation with SchemaModel: aiohttp-api makes form validation easy with the SchemaModel class, allowing you to validate incoming request data against defined schemas effortlessly.
-- Template rendering with Jinja2Template: aiohttp-api includes built-in support for Jinja2Template, allowing you to render HTML templates seamlessly.
+- Asynchronous by design: Built on top of asyncio and aiohttp, TezAPI allows you to write highly concurrent and efficient web applications.
+- Simple and intuitive API: With minimal boilerplate and sensible defaults, TezAPI provides a clean and intuitive API for defining routes and handling requests.
+- Error handling made easy: TezAPI simplifies error handling with support for both simple and class-based error responses, making it straightforward to handle exceptions and provide meaningful feedback to clients.
+- Schema validation with SchemaModel: TezAPI makes form validation easy with the SchemaModel class, allowing you to validate incoming request data against defined schemas effortlessly.
+- Template rendering with Jinja2Template: TezAPI includes built-in support for Jinja2Template, allowing you to render HTML templates seamlessly.
 
 ## Installation
 
@@ -24,9 +24,7 @@ pip install tezapi
 ## Quick Start
 
 ```python
-from tezapi import TezAPI, Request
-from tezapi.exceptions import APIError, ClassBaseError
-from tezapi.schemas import SchemaModel
+from tezapi import TezAPI
 from tezapi.templating import Jinja2Template
 
 app = TezAPI()
@@ -35,7 +33,7 @@ render = Jinja2Template('templates')
 # Define routes and handlers
 @app.get("/")
 async def hello():
-    return "Hello, aiohttp-api!"
+    return {'ok': True}
 
 # Run the aiohttp-api application
 app.run()
@@ -43,13 +41,13 @@ app.run()
 
 ## Advanced Features and Best Practices
 
-In addition to the basic setup and usage, aiohttp-api offers advanced features and best practices for building robust web applications.
+In addition to the basic setup and usage, TezAPI offers advanced features and best practices for building robust web applications.
 
 ### Advanced Routing Techniques
 
 #### Route Parameters
 
-In aiohttp-api, you can define routes with parameters that capture dynamic values from the URL. For example:
+In TezAPI, you can define routes with parameters that capture dynamic values from the URL. For example:
 
 ```python
 @app.get("/users/{user_id}")
@@ -58,9 +56,9 @@ async def get_user(request: Request, user_id: int):
     return {'user_id': user_id}
 ```
 
-#### Query Parameters
+### Query Parameters
 
-You can also handle query parameters in aiohttp-api routes. For example:
+You can also handle query parameters in TezAPI routes. For example:
 
 ```python
 @app.get("/search")
@@ -72,33 +70,34 @@ async def search_users(request: Request):
 
 ### Middleware
 
-Middleware in aiohttp-api allows you to intercept and modify requests and responses before they reach the handler. You can use middleware for tasks such as authentication, logging, and request/response manipulation.
+Middleware in TezAPI allows you to intercept and modify requests and responses before they reach the handler. You can use middleware for tasks such as authentication, logging, and request/response manipulation.
 
 ```python
 @app.middleware
-async def logger_middleware(request: Request, handler):
-    # Log request information
-    print(f"Received {request.method} request to {request.path}")
-    
-    # Call the next middleware/handler in the chain
-    response = await handler(request)
-    
-    # Log response information
-    print(f"Responded with {response.status}")
-    
+async def middleware_handler(request: Request, call_next):
+    print('Middleware started')
+    response = await call_next(request)
+    print('Middleware finished')
     return response
 
 ```
 
-### Static Files and Asset Handling
+### Model Parameters
 
-AioAPI allows you to serve static files such as CSS, JavaScript, and images alongside your dynamic content. You can use the `StaticFiles` class to define a route for serving static files from a directory:
+JSON Request models automatic filtering and validate
 
 ```python
-from tezapi.static import StaticFiles
+from tezapi.schemas import SchemaModel
 
-# Define a route for serving static files
-app.add_static('/static', path='static')
+class UserSchema(SchemaModel):
+    username: str
+    phone_number: str
+
+@app.post("/")
+async def hello(user: UserSchema):
+    print(user)
+    return user
 ```
+
 
 
