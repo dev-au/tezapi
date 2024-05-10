@@ -1,4 +1,5 @@
 from tezapi import TezAPI, Request
+from tezapi.schemas import SchemaModel
 from tezapi.templating import Jinja2Template
 
 app = TezAPI()
@@ -13,9 +14,6 @@ async def middleware_handler(request: Request, call_next):
     return response
 
 
-from tezapi.schemas import SchemaModel
-
-
 class UserSchema(SchemaModel):
     username: str
     phone_number: str
@@ -23,8 +21,7 @@ class UserSchema(SchemaModel):
 
 @app.post("/")
 async def hello(user: UserSchema):
-    print(user)
-    return user
+    return 'Hello ' + user.username
 
 
 app.run()

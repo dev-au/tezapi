@@ -42,14 +42,14 @@ class Route:
             return error.__response__
 
     async def _request_annotations(self, request: Request):
-        try:
-            json_data = await request.json()
-        except JSONDecodeException:
-            raise JSONDecodeError()
         data = {}
         for key, value in self.arguments.items():
             if issubclass(value, SchemaModel):
-                item = value(json_data)
+                try:
+                    json_data = await request.json()
+                    item = value(json_data)
+                except JSONDecodeException:
+                    raise JSONDecodeError()
             elif value == Request:
                 item = request
             else:
@@ -66,4 +66,3 @@ class Route:
                         raise APIError('PathValidationError', 400, f'{value.__name__} {key} must be a float')
             data[key] = item
         return data
-

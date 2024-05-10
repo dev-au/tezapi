@@ -25,8 +25,14 @@ class HTMLResponse(Response):
 
 class JSONResponse(Response):
     def __init__(self, json_content: dict, status_code: int = 200, headers: dict = None):
-        json_content = json.dumps(json_content)
-        super().__init__(content=json_content, status_code=status_code, content_type='application/json',
+        json_data = {
+            'error': {
+                'name': None,
+                'message': None
+            },
+            'data': json_content
+        }
+        super().__init__(content=json.dumps(json_data), status_code=status_code, content_type='application/json',
                          headers=headers)
 
 
