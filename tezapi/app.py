@@ -1,72 +1,119 @@
 from aiohttp import web
-from aiohttp.web import middleware as _middleware
 from aiohttp.web_request import Request
 
+from .middleware import Middleware
+from .router_field import Router
 from .routes import Route
 
 
-class TezAPI(web.Application):
+class TezAPI:
     def __init__(self, host: str = '127.0.0.1', port: int = 8000):
+        self.app = web.Application()
         self.host = host
         self.port = port
         self.routes = []
-        super().__init__()
+        self.middlewares: list[Middleware] = []
 
     def _add_route(self, path, handler, method: str, **kwargs):
         self.routes.append(web.route(method, path, handler, **kwargs))
 
-    def get(self, path: str, **kwargs):
+    def get(self, path: str):
+        def wrapper(func):
+            async def decorated(request: Request):
+                mid_result = await self._run_middleware(request)
+                if mid_result is not None:
+                    return mid_result
+                route = Route(func)
+                return await route(request)
+
+            self._add_route(path, decorated, 'GET', name=func.__name__)
+            return decorated
+
+        return wrapper
+
+    def post(self, path: str):
+        def wrapper(func):
+            async def decorated(request: Request):
+                mid_result = await self._run_middleware(request)
+                if mid_result is not None:
+                    return mid_result
+                route = Route(func)
+                return await route(request)
+
+            self._add_route(path, decorated, 'POST', name=func.__name__)
+            return decorated
+
+        return wrapper
+
+    def delete(self, path: str):
+        def wrapper(func):
+            async def decorated(request: Request):
+                mid_result = await self._run_middleware(request)
+                if mid_result is not None:
+                    return mid_result
+                route = Route(func)
+                return await route(request)
+
+            self._add_route(path, decorated, 'DELETE', name=func.__name__)
+            return decorated
+
+        return wrapper
+
+    def put(self, path: str):
+        def wrapper(func):
+            async def decorated(request: Request):
+                mid_result = await self._run_middleware(request)
+                if mid_result is not None:
+                    return mid_result
+                route = Route(func)
+                return await route(request)
+
+            self._add_route(path, decorated, 'PUT', name=func.__name__)
+            return decorated
+
+        return wrapper
+
+    def middleware(self, path: str = '*', method: str = '*'):
         def wrapper(func):
             async def decorated(request: Request):
                 route = Route(func)
                 return await route(request)
 
-            self._add_route(path, decorated, 'GET', name=func.__name__, **kwargs)
+            self.middlewares.append(Middleware(decorated, path, method))
             return decorated
 
         return wrapper
 
-    def post(self, path: str, **kwargs):
-        def wrapper(func):
-            async def decorated(request: Request):
-                route = Route(func)
-                return await route(request)
+    def _run_router_functions(self, router):
+        async def decorated(request: Request):
+            mid_result = await self._run_middleware(request)
+            if mid_result is not None:
+                return mid_result
+            route = router['handler']
+            return await route(request)
 
-            self._add_route(path, decorated, 'POST', name=func.__name__, **kwargs)
-            return decorated
+        self._add_route(router['path'], decorated, router['method'], name=router['name'])
 
-        return wrapper
+        return decorated
 
-    def delete(self, path: str, **kwargs):
-        def wrapper(func):
-            async def decorated(request: Request):
-                route = Route(func)
-                return await route(request)
+    async def _run_middleware(self, request: Request):
+        for middleware in self.middlewares:
+            print(request.path.startswith(middleware.path[:-1]))
 
-            self._add_route(path, decorated, 'DELETE', name=func.__name__, **kwargs)
-            return decorated
+            if (middleware.path == request.path or middleware.path == '*') and (
+                    middleware.method == request.method or middleware.method == '*') or (
+                    middleware.path[-1] == '*' and request.path.startswith(middleware.path[:-1])):
+                result = await middleware.route(request)
+                if result is not None:
+                    return result
 
-        return wrapper
+    def __add__(self, router: Router):
+        self.middlewares += router.middlewares
+        for route in router.routes:
+            self._run_router_functions(route)
 
-    def put(self, path: str, **kwargs):
-        def wrapper(func):
-            async def decorated(request: Request):
-                route = Route(func)
-                return await route(request)
-
-            self._add_route(path, decorated, 'PUT', name=func.__name__, **kwargs)
-            return decorated
-
-        return wrapper
-
-    def middleware(self, func):
-        @_middleware
-        async def run_middleware(request, handler):
-            return await func(request, handler)
-
-        self.middlewares.append(run_middleware)
-        return run_middleware
+        return self
 
     def run(self):
-        self.add_routes(self.routes)
-        web.run_app(self, host=self.host, port=self.port)
+        self.app.add_routes(self.routes)
+        web.run_app(self.app, host=self.host, port=self.port)

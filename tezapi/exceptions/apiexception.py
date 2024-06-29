@@ -12,6 +12,8 @@ class APIError(Exception):
         self.message = message
         self.headers = headers
         exception_data = {
+            'ok': False,
+            'status': self.status_code,
             'error': {
                 'name': name,
                 'message': message
@@ -36,6 +38,8 @@ class ClassBaseError(Exception):
         cls.message = message
         cls.headers = headers
         exception_data = {
+            'ok': False,
+            'status': status_code,
             'error': {
                 'name': name,
                 'message': message

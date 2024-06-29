@@ -30,6 +30,8 @@ class Route:
             return error.__response__
         try:
             result = await self.handler(**request_path_data)
+            if result is None:
+                return None
             if isinstance(result, dict):
                 return JSONResponse(result).__response__
             try:
